@@ -50,5 +50,26 @@ pipeline {
               sh "./gradlew build"
             }
           }
+
+          stage("Docker build") {
+            steps {
+              sh "docker build -t sivaprasadreddy/moviefinder:${BUILD_TIMESTAMP} ."
+            }
+          }
+
+          stage("Docker login") {
+            steps {
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub-credentials',
+                                usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                sh "docker login --username $USERNAME --password $PASSWORD"
+              }
+            }
+          }
+
+          stage("Docker push") {
+            steps {
+              sh "docker push sivaprasadreddy/moviefinder:${BUILD_TIMESTAMP}"
+            }
+          }
      }
 }
