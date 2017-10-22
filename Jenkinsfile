@@ -51,23 +51,14 @@ pipeline {
             }
           }
 
-          stage("Docker build") {
+          stage("Publish to DockerHub") {
             steps {
               sh "docker build -t sivaprasadreddy/moviefinder:${BUILD_NUMBER} ."
-            }
-          }
-
-          stage("Docker login") {
-            steps {
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub-credentials',
+              withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                                credentialsId: 'docker-hub-credentials',
                                 usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh "docker login --username $USERNAME --password $PASSWORD"
+                  sh "docker login --username $USERNAME --password $PASSWORD"
               }
-            }
-          }
-
-          stage("Docker push") {
-            steps {
               sh "docker push sivaprasadreddy/moviefinder:${BUILD_NUMBER}"
             }
           }
