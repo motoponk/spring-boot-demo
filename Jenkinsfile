@@ -53,7 +53,7 @@ pipeline {
 
           stage("Docker build") {
             steps {
-              sh "docker build -t sivaprasadreddy/moviefinder:${BUILD_TIMESTAMP} ."
+              sh "docker build -t sivaprasadreddy/moviefinder:${BUILD_NUMBER} ."
             }
           }
 
@@ -68,7 +68,7 @@ pipeline {
 
           stage("Docker push") {
             steps {
-              sh "docker push sivaprasadreddy/moviefinder:${BUILD_TIMESTAMP}"
+              sh "docker push sivaprasadreddy/moviefinder:${BUILD_NUMBER}"
             }
           }
      }
