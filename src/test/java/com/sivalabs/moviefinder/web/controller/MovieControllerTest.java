@@ -36,6 +36,12 @@ public class MovieControllerTest {
     List<String> genres = Arrays.asList("Comedy","Crime","Drama","Thriller");
 
     @Test
+    public void test_index_redirection() throws Exception {
+        final String view = controller.index();
+        assertThat(view).isEqualTo("redirect:/movies");
+    }
+
+    @Test
     public void test_get_all_movies() throws Exception {
         Model model = new ExtendedModelMap();
         String searchKey = "";
