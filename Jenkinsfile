@@ -18,6 +18,12 @@ pipeline {
             }
           }
 
+          stage("Integration test") {
+            steps {
+              sh "./gradlew integrationTest"
+            }
+          }
+
           stage("Code coverage") {
             steps {
               sh "./gradlew jacocoTestReport"

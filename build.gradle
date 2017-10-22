@@ -32,6 +32,23 @@ repositories {
 	maven { url "https://repo.spring.io/milestone" }
 }
 
+sourceSets {
+	test {
+		java.srcDirs = ['src/test/unit/java']
+		resources.srcDirs = ['src/test/unit/resources']
+	}
+	integrationTest {
+		java.srcDirs = ['src/test/integration/java']
+		resources.srcDirs = ['src/test/integration/resources']
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
+	}
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
 
 dependencies {
 	compile "org.springframework.boot:spring-boot-starter-actuator"
@@ -50,8 +67,41 @@ jacocoTestCoverageVerification {
 	violationRules {
 		rule {
 			limit {
-				minimum = 0.2
+				minimum = 0.5
 			}
 		}
 	}
+}
+
+// to run coverage verification during the build (and fail when appropriate)
+check.dependsOn jacocoTestCoverageVerification
+
+jacocoTestReport {
+	reports {
+		html {
+			enabled true
+		}
+	}
+	afterEvaluate {
+		classDirectories = files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [ '**/config/*', '**/entity/*', '**/*Application*' ])
+		})
+	}
+}
+
+test {
+	jacoco {
+		append = false
+		destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+		classDumpDir = file("$buildDir/jacoco/classpathdumps")
+	}
+}
+
+task integrationTest(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+integrationTest {
+	systemProperties = System.properties
 }
