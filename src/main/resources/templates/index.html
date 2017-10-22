@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>SivaLabs: MovieFinder</title>
+    <link rel="stylesheet"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <style>
+        body {
+            padding-top: 75px;
+        }
+        .inactive {
+          text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">SivaLabs - MovieFinder</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container" id="app">
+    <div class="row">
+        <div class="col-md-9">
+            <div>
+                <form class="form-inline" method="get" th:action="@{/movies}">
+                    <div class="form-group ">
+                        <input type="text" class="form-control"
+                               style="width: 480px;"
+                               placeholder="Enter movie name to search"
+                               name="searchKey"
+                               />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+            <br/>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Genres</th>
+                    </tr>
+                </thead>
+                <tr th:each="movie,iter : ${movies}" >
+                    <td th:text="${iter.index + 1}">No</td>
+                    <td th:text="${movie.title}">title</td>
+                    <td th:text="${#strings.listJoin(movie.genres, ',')}">genres</td>
+                </tr>
+            </table>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Genres</h4>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li th:each="genre : ${genres}">
+                            <a href="#" th:href="@{/movies(genre=${genre})}" th:text="${genre}">genre</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+</body>
+</html>

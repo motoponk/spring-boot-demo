@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  mfdb:
+    image: mysql:5.7
+    container_name: mfdb
+    environment:
+     MYSQL_ROOT_PASSWORD: admin
+     MYSQL_DATABASE: mf
+     MYSQL_USER: mfuser
+     MYSQL_PASSWORD: mfpwd
+
+  moviefinder:
+    build: .
+    container_name: moviefinder
+    ports:
+     - "9090:8080"
+     - '9797:8787'
+    depends_on:
+      - mfdb
