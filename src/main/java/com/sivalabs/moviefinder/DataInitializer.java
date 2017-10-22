@@ -1,5 +1,6 @@
 package com.sivalabs.moviefinder;
 
+import com.sivalabs.moviefinder.config.MovieFinderConfig;
 import com.sivalabs.moviefinder.entity.Movie;
 import com.sivalabs.moviefinder.repository.MovieRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,15 @@ import java.util.List;
 @Component
 public class DataInitializer implements CommandLineRunner
 {
-    @Value("${movies-data-file:movies-200.csv}")
-    private String filename;
+    private MovieFinderConfig movieFinderConfig;
+    private MovieRepository repo;
 
     @Autowired
-    private MovieRepository repo;
+    public DataInitializer(MovieFinderConfig movieFinderConfig, MovieRepository repo) {
+        this.movieFinderConfig = movieFinderConfig;
+        this.repo = repo;
+    }
+
 
     @Override
     public void run(String... strings) throws URISyntaxException, IOException {
@@ -36,8 +41,9 @@ public class DataInitializer implements CommandLineRunner
 
         long start = System.currentTimeMillis();
 
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
-        log.debug("Filename: {}, stream: {}", filename, inputStream);
+        InputStream inputStream = this.getClass().getClassLoader()
+                .getResourceAsStream(movieFinderConfig.getDataFile());
+        log.debug("Filename: {}, stream: {}", movieFinderConfig.getDataFile(), inputStream);
         int count = 0;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
