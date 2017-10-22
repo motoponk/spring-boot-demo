@@ -16,6 +16,9 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Database initializer
+ */
 @Slf4j
 @Component
 public class DataInitializer implements CommandLineRunner

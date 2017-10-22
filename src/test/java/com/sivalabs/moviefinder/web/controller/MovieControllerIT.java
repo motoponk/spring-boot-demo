@@ -22,6 +22,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 
+/**
+ * Integration tests for MovieController
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = MovieController.class)
 public class MovieControllerIT {

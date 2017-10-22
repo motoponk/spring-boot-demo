@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service to perform operations on movies like searching for movies by name or by genre
+ */
 @Service
 @Slf4j
 public class MovieService {

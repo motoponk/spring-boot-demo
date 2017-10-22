@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Movie database entity
+ */
 @Entity
 @Table(name = "MOVIES")
 @Data

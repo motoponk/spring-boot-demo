@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * Controller which handler web requests for /movies endpoint
+ */
 @Controller
 public class MovieController
 {
