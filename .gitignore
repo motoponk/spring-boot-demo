@@ -3,6 +3,7 @@
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
+bin
 .apt_generated
 .classpath
 .factorypath
@@ -23,3 +24,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+.vagrant

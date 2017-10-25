@@ -1,0 +1,25 @@
+---
+- hosts: loadbalancer
+  become: true
+  gather_facts: yes
+  remote_user: vagrant
+
+  tasks:
+  - name: Install nginx
+    apt: name=nginx state=installed update_cache=true
+    become: true
+
+  - name: Start nginx
+    service: name=nginx state=started
+    become: true
+
+  - name: Create nginx config
+    template: src=/vagrant/vagrant/ansible/files/nginx.conf dest=/etc/nginx/sites-available/default
+    become: true
+    notify:
+      - restart nginx
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+      become: true
