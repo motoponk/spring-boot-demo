@@ -58,6 +58,7 @@ dependencies {
 	compile "com.h2database:h2"
 	compile "org.projectlombok:lombok"
 	compile "org.springframework.boot:spring-boot-devtools"
+	compile "org.springframework.boot:spring-boot-configuration-processor"
 	testCompile "org.springframework.boot:spring-boot-starter-test"
 	compile "org.webjars:bootstrap:3.3.7"
 }

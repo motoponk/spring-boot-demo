@@ -21,7 +21,7 @@ public class Movie {
 
     private String title;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
             name="GENRES",
             joinColumns=@JoinColumn(name="MOVIE_ID")

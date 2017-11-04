@@ -35,8 +35,7 @@ public class MovieService {
     }
 
     public List<Movie> findMovies(String searchKey) {
-        Pageable pageable   = PageRequest.of(0, PAGE_SIZE);
-        return repo.findMovies(searchKey, pageable).getContent();
+        return repo.findMovies(searchKey);
     }
 
     public List<Movie> findMoviesByGenre(String genre) {
