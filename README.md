@@ -1,2 +1,1 @@
-# movie-finder
-Movie Finder App
+# Spring Boot Demo
