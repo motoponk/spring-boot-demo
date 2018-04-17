@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Movie database entity
@@ -18,8 +21,14 @@ import java.util.List;
 public class Movie {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    private String movieCode;
     private String title;
+
+    private boolean isAdult;
+    private int releasedYear;
+    private int durationInMinutes;
+    private double avgRating;
+    private int votes;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -27,5 +36,30 @@ public class Movie {
             joinColumns=@JoinColumn(name="MOVIE_ID")
     )
     @Column(name="GENRE")
-    private List<String> genres;
+    private Set<String> genres;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name="DIRECTORS",
+            joinColumns=@JoinColumn(name="MOVIE_ID")
+    )
+    @Column(name="DIRECTOR")
+    private Set<String> directors;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name="WRITERS",
+            joinColumns=@JoinColumn(name="MOVIE_ID")
+    )
+    @Column(name="WRITER")
+    private Set<String> writers;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name="ACTORS",
+            joinColumns=@JoinColumn(name="MOVIE_ID")
+    )
+    @Column(name="ACTOR")
+    private Set<String> actors;
+
 }

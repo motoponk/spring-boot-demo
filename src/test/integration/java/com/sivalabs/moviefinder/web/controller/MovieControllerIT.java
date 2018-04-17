@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
@@ -35,10 +36,61 @@ public class MovieControllerIT {
     @MockBean
     MovieService movieService;
 
-    Movie m1 = new Movie(1L,"Pulp Fiction", Arrays.asList("Comedy","Crime","Drama","Thriller"));
-    Movie m2 = new Movie(2L,"Priest", Arrays.asList("Drama"));
-    Movie m3 = new Movie(3L,"Roommates", Arrays.asList("Comedy","Drama"));
-    Movie m4 = new Movie(4L,"Shawshank Redemption", Arrays.asList("Crime","Drama"));
+    Movie m1 = new Movie(1L,
+            "m1",
+            "Pulp Fiction",
+            false,
+            2000,
+            60,
+            9.0,
+            456,
+            Arrays.asList("Comedy","Crime","Drama","Thriller").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Samuel L Jackson","John Travolta","Uma Thuraman").stream().collect(Collectors.toSet())
+    );
+
+    Movie m2 = new Movie(2L,
+            "m2",
+            "Kill Bill",
+            false,
+            2003,
+            70,
+            8.0,
+            496,
+            Arrays.asList("Crime","Drama").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Samuel L Jackson","Uma Thuraman").stream().collect(Collectors.toSet())
+    );
+
+    Movie m3 = new Movie(3L,
+            "m3",
+            "Shawshank Redemption",
+            false,
+            2000,
+            60,
+            9.0,
+            456,
+            Arrays.asList("Comedy","Crime","Drama").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Samuel L Jackson","John Travolta","Uma Thuraman").stream().collect(Collectors.toSet())
+    );
+
+    Movie m4 = new Movie(4L,
+            "m4",
+            "Priest",
+            false,
+            2003,
+            70,
+            8.0,
+            496,
+            Arrays.asList("Crime","Drama").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Quentin Tarantino").stream().collect(Collectors.toSet()),
+            Arrays.asList("Samuel L Jackson","Uma Thuraman").stream().collect(Collectors.toSet())
+    );
 
     List<String> genres = Arrays.asList("Comedy","Crime","Drama","Thriller");
 

@@ -2,12 +2,12 @@ package com.sivalabs.moviefinder.service;
 
 import com.sivalabs.moviefinder.entity.Movie;
 import com.sivalabs.moviefinder.repository.MovieRepository;
+import com.sivalabs.moviefinder.support.logging.Loggable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,13 +15,13 @@ import java.util.List;
  * Service to perform operations on movies like searching for movies by name or by genre
  */
 @Service
+@Transactional
 @Slf4j
+@Loggable
 public class MovieService {
 
-    private static final int PAGE_SIZE = 500;
-
-    private MovieRepository repo;
-    private JdbcTemplate jdbcTemplate;
+    private final MovieRepository repo;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public MovieService(MovieRepository repo, JdbcTemplate jdbcTemplate) {
@@ -30,7 +30,7 @@ public class MovieService {
     }
 
     public List<String> getGenres() {
-        return jdbcTemplate.query("select distinct genre from genres",
+        return jdbcTemplate.query("select distinct genre from genres ORDER BY genre",
                 (resultSet, i) -> resultSet.getString("genre"));
     }
 

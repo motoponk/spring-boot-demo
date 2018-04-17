@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -24,15 +27,18 @@ public class DataInitializerTest {
     @Mock
     MovieRepository repo;
 
+    @Mock
+    JdbcTemplate jdbcTemplate;
+
     @InjectMocks
     DataInitializer dataInitializer;
 
     @Test
     public void run() throws Exception {
-        when(movieFinderConfig.getDataFile()).thenReturn("movies-200.csv");
+        when(movieFinderConfig.getDataFiles()).thenReturn(Arrays.asList("movies-small.tsv"));
         dataInitializer.run();
 
-        verify(repo, times(1)).deleteAll();
+        verify(jdbcTemplate, atLeast(1)).execute(anyString());
         verify(repo, atLeast(1)).save(any(Movie.class));
     }
 

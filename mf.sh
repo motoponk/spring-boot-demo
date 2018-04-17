@@ -2,7 +2,7 @@
 
 declare project_dir=$(dirname $0)
 declare docker_compose_file=${project_dir}/docker-compose.yml
-declare moviefinder="moviefinder"
+declare moviefinder="movie-finder"
 
 function start() {
     echo 'Starting movie-finder....'

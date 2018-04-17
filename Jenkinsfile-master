@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_USERNAME = 'sivaprasadreddy'
+        APPLICATION_NAME = 'movie-finder'
+    }
+
+    parameters {
+        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false,
+                     description: 'Should build and publish Docker Image to DockerHub?')
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    stages {
+        stage("Compile") {
+          steps {
+               slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+               sh "./gradlew compileJava"
+            }
+        }
+
+        stage("Unit test") {
+          steps {
+               sh "./gradlew test"
+          }
+        }
+
+        stage("Code coverage") {
+            steps {
+               sh "./gradlew jacocoTestReport"
+               publishHTML (target: [
+                 reportDir: 'build/reports/jacoco/test/html',
+                 reportFiles: 'index.html',
+                 reportName: "JaCoCo Report"
+               ])
+               sh "./gradlew jacocoTestCoverageVerification"
+            }
+        }
+
+        stage("Package") {
+            steps {
+                 sh "./gradlew build"
+            }
+        }
+
+        stage("Publish to DockerHub") {
+            when {
+                // Only publish if PUBLISH_TO_DOCKERHUB=true
+                expression { params.PUBLISH_TO_DOCKERHUB == true }
+            }
+            steps {
+              sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
+
+              withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                                credentialsId: 'docker-hub-credentials',
+                                usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                  sh "docker login --username $USERNAME --password $PASSWORD"
+              }
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest"
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
+            }
+        }
+
+        stage("Acceptance test") {
+           steps {
+                sh "docker-compose -f docker-compose.yml -f acceptance/docker-compose-acceptance.yml build test"
+                sh "docker-compose -f docker-compose.yml -f acceptance/docker-compose-acceptance.yml -p acceptance up -d"
+                sh 'test $(docker wait acceptance_test_1) -eq 0'
+            }
+        }
+    }
+
+    post {
+        success {
+             slackSend channel: '#builds',
+             color: 'good',
+             message: "The pipeline ${currentBuild.fullDisplayName} is successful."
+        }
+        failure {
+             slackSend channel: '#builds',
+             color: 'danger',
+             message: "The pipeline ${currentBuild.fullDisplayName} failed."
+        }
+
+        always {
+            sh "docker-compose -f docker-compose.yml -f acceptance/docker-compose-acceptance.yml -p acceptance down"
+        }
+    }
+}

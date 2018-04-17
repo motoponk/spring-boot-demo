@@ -1,41 +1,52 @@
 pipeline {
-     agent any
+    agent any
 
-     triggers {
-         pollSCM('* * * * *')
-     }
+    environment {
+        DOCKER_USERNAME = 'sivaprasadreddy'
+        APPLICATION_NAME = 'movie-finder'
+    }
 
-     stages {
-          stage("Compile") {
-            steps {
-              sh "./gradlew compileJava"
+    parameters {
+        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false,
+                     description: 'Should build and publish Docker Image to DockerHub?')
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    stages {
+        stage("Compile") {
+          steps {
+               sh "./gradlew compileJava"
             }
-          }
+        }
 
-          stage("Unit test") {
-            steps {
-              sh "./gradlew test"
-            }
+        stage("Unit test") {
+          steps {
+               sh "./gradlew test"
           }
+        }
 
-          stage("Integration test") {
+        stage("Integration test") {
             steps {
               sh "./gradlew integrationTest"
             }
-          }
+        }
 
-          stage("Code coverage") {
+        stage("Code coverage") {
             steps {
-              sh "./gradlew jacocoTestReport"
-              publishHTML (target: [
-                     reportDir: 'build/reports/jacoco/test/html',
-                     reportFiles: 'index.html',
-                     reportName: "JaCoCo Report" ])
-              sh "./gradlew jacocoTestCoverageVerification"
+               sh "./gradlew jacocoTestReport"
+               publishHTML (target: [
+                 reportDir: 'build/reports/jacoco/test/html',
+                 reportFiles: 'index.html',
+                 reportName: "JaCoCo Report"
+               ])
+               sh "./gradlew jacocoTestCoverageVerification"
             }
-          }
+        }
 
-          stage("Static code analysis") {
+        stage("Static code analysis") {
             steps {
               sh "./gradlew checkstyleMain"
               publishHTML (target: [
@@ -43,24 +54,32 @@ pipeline {
                      reportFiles: 'main.html',
                      reportName: "Checkstyle Report" ])
             }
-          }
+        }
 
-          stage("Build") {
+        stage("Package") {
             steps {
-              sh "./gradlew build"
+                 sh "./gradlew build"
             }
-          }
+        }
 
-          stage("Publish to DockerHub") {
+        stage("Publish to DockerHub") {
+            when {
+                // Only publish if PUBLISH_TO_DOCKERHUB=true
+                expression { params.PUBLISH_TO_DOCKERHUB == true }
+            }
             steps {
-              sh "docker build -t sivaprasadreddy/moviefinder:${BUILD_NUMBER} ."
+              sh "docker build -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER} -t ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest ."
+
               withCredentials([[$class: 'UsernamePasswordMultiBinding',
                                 credentialsId: 'docker-hub-credentials',
                                 usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                   sh "docker login --username $USERNAME --password $PASSWORD"
               }
-              sh "docker push sivaprasadreddy/moviefinder:${BUILD_NUMBER}"
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:latest"
+              sh "docker push ${env.DOCKER_USERNAME}/${env.APPLICATION_NAME}:${BUILD_NUMBER}"
             }
-          }
-     }
+        }
+
+    }
+
 }
