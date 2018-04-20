@@ -35,6 +35,9 @@ public class MovieService {
     }
 
     public List<Movie> findMovies(String searchKey) {
+        if(searchKey != null && searchKey.trim().isEmpty()){
+            return repo.findAll();
+        }
         return repo.findMovies(searchKey);
     }
 

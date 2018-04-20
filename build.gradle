@@ -23,10 +23,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'checkstyle'
 apply plugin: "jacoco"
 
-jar {
-	baseName = 'movie-finder'
-}
-
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
@@ -173,4 +169,5 @@ springBoot  {
 
 bootJar  {
 	classifier = 'exec'
+	launchScript()
 }

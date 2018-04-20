@@ -72,19 +72,19 @@ public class DataInitializer implements CommandLineRunner
     }
 
     private void clearData() {
-        jdbcTemplate.execute("DELETE FROM ACTORS");
+        jdbcTemplate.execute("DELETE FROM actors");
         log.info("Deleted all ACTORS");
 
-        jdbcTemplate.execute("DELETE FROM WRITERS");
+        jdbcTemplate.execute("DELETE FROM writers");
         log.info("Deleted all WRITERS");
 
-        jdbcTemplate.execute("DELETE FROM DIRECTORS");
+        jdbcTemplate.execute("DELETE FROM directors");
         log.info("Deleted all DIRECTORS");
 
-        jdbcTemplate.execute("DELETE FROM GENRES");
+        jdbcTemplate.execute("DELETE FROM genres");
         log.info("Deleted all GENRES");
 
-        jdbcTemplate.execute("DELETE FROM MOVIES");
+        jdbcTemplate.execute("DELETE FROM movies");
         log.info("Deleted all MOVIES");
 
     }

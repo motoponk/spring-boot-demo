@@ -1,5 +1,5 @@
 FROM frolvlad/alpine-oraclejdk8:slim
-ADD ["build/libs/movie-finder-1.0.0-SNAPSHOT.jar", "app.jar"]
+ADD ["build/libs/spring-boot-demo-1.0.0-SNAPSHOT-exec.jar", "app.jar"]
 RUN sh -c 'touch /app.jar'
 ENV JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8787,suspend=n"
 ENV SPRING_PROFILES_ACTIVE "docker"
