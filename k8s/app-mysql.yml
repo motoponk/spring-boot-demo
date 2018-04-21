@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: moviefinder
-        image: sivaprasadreddy/moviefinder
+        image: sivaprasadreddy/movie-finder
         env:
           - name: SPRING_PROFILES_ACTIVE
             value: k8s-mysql
