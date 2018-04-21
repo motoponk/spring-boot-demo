@@ -7,7 +7,7 @@ pipeline {
     }
 
     parameters {
-        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false,
+        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: true,
                      description: 'Should build and publish Docker Image to DockerHub?')
     }
 
