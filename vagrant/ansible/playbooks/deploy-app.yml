@@ -1,13 +1,13 @@
 ---
 - hosts: web
-  sudo: yes
+  become: true
   gather_facts: no
   remote_user: vagrant
 
   tasks:
 
   - name: copy app jar
-    copy: src=/vagrant/build/libs/movie-finder-1.0.0-SNAPSHOT.jar dest=/home/vagrant/moviefinder.jar mode=644 owner=root group=root
+    copy: src=/vagrant/build/libs/spring-boot-demo-1.0.0-SNAPSHOT-exec.jar dest=/home/vagrant/moviefinder.jar mode=644 owner=root group=root
 
   - name: stop app
     shell: kill -9 `ps -ef | grep 'java -jar moviefinder' | grep -v grep | awk '{ print $2 }'`

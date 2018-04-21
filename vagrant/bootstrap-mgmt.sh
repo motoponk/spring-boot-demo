@@ -6,6 +6,13 @@ apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get -y install ansible
 
+# apt-get -y install python-minimal
+# apt-get -y install language-pack-UTF-8
+
+# echo "Generating ssh key"
+# ssh-keygen -t rsa -b 2048
+# ssh-keygen -f /home/vagrant/.ssh/id_rsa -t rsa -N ''
+
 # copy examples into /home/vagrant (from inside the mgmt node)
 cp -a /vagrant/vagrant/ansible/* /home/vagrant
 chown -R vagrant:vagrant /home/vagrant

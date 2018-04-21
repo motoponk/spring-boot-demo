@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_USERNAME = 'sivaprasadreddy'
+        APPLICATION_NAME = 'movie-finder'
+    }
+
+    parameters {
+        booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: false,
+                     description: 'Should build and publish Docker Image to DockerHub?')
+    }
+
+    stages {
+        stage("Compile") {
+          steps {
+               sh "./gradlew compileJava"
+            }
+        }
+
+        stage("Unit test") {
+          steps {
+               sh "./gradlew test"
+          }
+        }
+    }
+
+}

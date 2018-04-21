@@ -80,6 +80,17 @@ pipeline {
             }
         }
 
+        stage("Deploy to Kubernetes") {
+            agent {
+                label 'master'
+            }
+            steps {
+                sh "kubectl create -f k8s/config.yml"
+                sh "kubectl create -f k8s/mysql.yml"
+                sh "kubectl create -f k8s/app.yml"
+            }
+        }
+
     }
 
 }

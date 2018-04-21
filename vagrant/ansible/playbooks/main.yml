@@ -1,0 +1,5 @@
+---
+- include: 'ssh-addkey.yml'
+- include: 'install-nginx.yml'
+- include: 'install-java.yml'
+- include: 'deploy-app.yml'
