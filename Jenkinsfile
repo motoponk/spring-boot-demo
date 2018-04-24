@@ -9,6 +9,9 @@ pipeline {
     parameters {
         booleanParam(name: 'PUBLISH_TO_DOCKERHUB', defaultValue: true,
                      description: 'Should build and publish Docker Image to DockerHub?')
+
+        booleanParam(name: 'DEPLOY_TO_KUBERNETES', defaultValue: false,
+                     description: 'Deploy to Kubernetes?')
     }
 
     triggers {
@@ -81,6 +84,9 @@ pipeline {
         }
 
         stage("Deploy to Kubernetes") {
+            when {
+                expression { params.DEPLOY_TO_KUBERNETES == true }
+            }
             agent {
                 label 'master'
             }
